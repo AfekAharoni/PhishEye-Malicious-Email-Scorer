@@ -21,7 +21,7 @@ HREF_ATTR = "href"
 KEY_DISPLAY_TEXT = "display_text"
 KEY_ACTUAL_URL = "actual_url"
 
-# API configuration
+# Safe Browsing API configuration
 SAFE_BROWSING_API_KEY = os.getenv("SAFE_BROWSING_API_KEY")
 SAFE_BROWSING_URL = "https://safebrowsing.googleapis.com/v4/threatMatches:find"
 SAFE_BROWSING_CLIENT_ID = "malicious-email-scorer"
@@ -62,3 +62,11 @@ CLIENT_ERROR_STATUS_CODE = 400
 # Links to ignore
 MAILTO_IGNORE = "mailto:"
 TEL_IGNORE = "tel:"
+
+# Status
+SAFE_STATUS = "Safe"
+MALICIOUS_STATUS = "Malicious"
+SUSPICIOUS_STATUS = "Suspicious"
+
+# VirusTotal API configuration
+VIRUS_TOTAL_API_KEY = os.getenv("VIRUS_TOTAL_API_KEY")
