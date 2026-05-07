@@ -58,3 +58,7 @@ TIMEOUT = 5
 # Status codes
 SUCCESS_STATUS_CODE = 200
 CLIENT_ERROR_STATUS_CODE = 400
+
+# Links to ignore
+MAILTO_IGNORE = "mailto:"
+TEL_IGNORE = "tel:"

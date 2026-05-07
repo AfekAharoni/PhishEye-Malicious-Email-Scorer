@@ -10,6 +10,8 @@ class URLAnalyzer:
     def is_malicious_url_by_google(url: str) -> Optional[bool]:
         """
         Queries google safe browsing API
+        Args:
+            url (str): The url to be checked
         Returns:
             bool: True iff the url is malicious
         """
