@@ -1,3 +1,8 @@
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Regex patterns
 
 URL_PATTERN = r'https?://[^\s<>"]+|www\.[^\s<>"]+'
@@ -15,3 +20,41 @@ HREF_ATTR = "href"
 # Dictionary keys (for consistency between modules)
 KEY_DISPLAY_TEXT = "display_text"
 KEY_ACTUAL_URL = "actual_url"
+
+# API configuration
+SAFE_BROWSING_API_KEY = os.getenv("SAFE_BROWSING_API_KEY")
+SAFE_BROWSING_URL = "https://safebrowsing.googleapis.com/v4/threatMatches:find"
+SAFE_BROWSING_CLIENT_ID = "malicious-email-scorer"
+SAFE_BROWSING_CLIENT_VERION = "1.0.0"
+
+# Threat types
+THREAT_TYPES = ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE"]
+"""
+MALWARE - Sites that host malicious software designed to damage or gain
+    unauthorized access 
+SOCIAL_ENGINEERING - Identifies deceptive sites, such as phising sites, that 
+    trick users into revealing sensitive information like password or credit
+    card number
+UNWANTED_SOFTWARE - Flags sites that promote or distribute software that
+    may be deceptive, difficult to uninstall or perform unexpected actions
+    on a user's device
+"""
+PLATFORM_TYPES = ["ANY_PLATFORM"], # works for every platform, i.e Windows/Mac/Andriod etc
+THREAT_ENTRY_TYPES = ["URL"]
+URL_PLACEHOLDER = "{URL_HERE}"
+REQUEST_TO_GOOGLE_API = {
+    "client": {
+        "clientId": SAFE_BROWSING_CLIENT_ID,
+        "clientVersion": SAFE_BROWSING_CLIENT_VERION
+    },
+    "threatInfo": {
+        "threatTypes": THREAT_TYPES,
+        "platformTypes": PLATFORM_TYPES,
+        "threatEntryTypes": THREAT_ENTRY_TYPES,
+        "threatEntries": [{"url": URL_PLACEHOLDER}]
+    }
+}
+TIMEOUT = 5
+# Status codes
+SUCCESS_STATUS_CODE = 200
+CLIENT_ERROR_STATUS_CODE = 400
