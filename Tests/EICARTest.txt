@@ -1,0 +1,12 @@
+{
+  "subject": "Urgent: EICAR Test",
+  "body": "This is a security test with a malicious attachment.",
+  "sender": "attacker@example.com",
+  "attachments": [
+    {
+      "filename": "malicious_file.txt",
+      "content": "WDVPIVAlQEFQU1s0XFBaWDU0KFBeKTdDQyk3fSRFSUNBUi1TVEFOREFSRC1BTlRJVklSVVMtVEVTVC1GSUxFISEkSStIKg==",
+      "mimeType": "text/plain"
+    }
+  ]
+}
