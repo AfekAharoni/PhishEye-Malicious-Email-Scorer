@@ -10,6 +10,7 @@ from contextlib import asynccontextmanager
 import base64
 import uvicorn
 import vt
+import hashlib
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -37,9 +38,9 @@ app = FastAPI(lifespan=lifespan);
 
 @app.post("/analyze")
 async def analyze_email(data: EmailData, request: Request):
-    reasons = []
+    reasons = [] 
+    score = 0
     has_malicious = False
-    could_not_check_all = False 
     # URL checker
     hyperlinks = EmailPreprocessor.extract_hyperlinks(data.body)
     raw_urls = EmailPreprocessor.extract_urls(data.body)
@@ -53,9 +54,10 @@ async def analyze_email(data: EmailData, request: Request):
         result = URLAnalyzer.is_malicious_url_by_google(url)
         if result is True:
             has_malicious = True
+            score += 100
             reasons.append(f"Dangerous link detected: {url}")
         elif result is None:
-            could_not_check_all = True
+            score += 15
             reasons.append(f"Could not verify the safety of: {url}")
     if data.attachments:
         for att in data.attachments:
@@ -66,34 +68,32 @@ async def analyze_email(data: EmailData, request: Request):
                 if report.get("status") == "found":
                     if report.get(MALICIOUS_STATUS, 0) > 0:
                         has_malicious = True
+                        score += 100
                         reasons.append(f"Malicious file detected: {att.filename}")
                     elif report.get(SUSPICIOUS_STATUS, 0) > 0:
-                        could_not_check_all = True
+                        score += 60
                         reasons.append(f"Suspicious file detected: {att.filename}")
                     else:
                         reasons.append(f'File "{att.filename}" was checked and is clean')
                 elif report.get("status") == "not_found":
-                    could_not_check_all = True
+                    score += 20
                     reasons.append(f"File {att.filename} is unknown to VirusTotal")
                 elif report.get("status") == "error":
-                    could_not_check_all = True
+                    score += 20
                     reasons.append(f"System error: {report.get('message')}")
             except Exception as e:
-                could_not_check_all = True
+                score += 20
                 reasons.append(f"Error analyzing file {att.filename}")
-    
     # Sum up
+    final_score = min(score, 100)
     if has_malicious:
         final_status = MALICIOUS_STATUS
-        final_score = 100
         display_message = "Warning: this email contains malicious content (links or files)."
-    elif could_not_check_all:
+    elif final_score > 0:
         final_status = SUSPICIOUS_STATUS
-        final_score = 50
         display_message = "Caution: some elements could not be fully verified."
     else:
         final_status = SAFE_STATUS
-        final_score = 0
         display_message = "All elements in this email appear to be safe."
     return {
         "status": final_status,
