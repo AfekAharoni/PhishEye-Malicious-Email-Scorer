@@ -20,3 +20,4 @@ Thumbs.db
 .clasp.json
 node_modules/
 
+Tests/EICARTest.txt
