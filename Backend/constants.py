@@ -70,3 +70,7 @@ SUSPICIOUS_STATUS = "Suspicious"
 
 # VirusTotal API configuration
 VIRUS_TOTAL_API_KEY = os.getenv("VIRUS_TOTAL_API_KEY")
+
+# Safe file extensions
+SAFE_EXTENSIONS = {'log', 'txt', 'bmp', 'gif', 'png', 'jpeg', 'jpg', 'wma', 'avi',
+                   'wav', 'mp4', 'mp3', 'webp', 'txt'}
