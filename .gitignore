@@ -1,6 +1,7 @@
 # --- Project Specific Folders ---
 /Server/
 /.hypothesis/
+/Tests/
 
 # --- Python ---
 __pycache__/
@@ -18,3 +19,4 @@ Thumbs.db
 # --- Apps Script / Tooling ---
 .clasp.json
 node_modules/
+
