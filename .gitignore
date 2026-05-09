@@ -2,6 +2,7 @@
 /Server/
 /.hypothesis/
 /Tests/
+/Presentation/
 
 # --- Python ---
 __pycache__/

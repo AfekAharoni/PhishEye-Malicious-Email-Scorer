@@ -82,7 +82,7 @@ VIRUS_TOTAL_API_KEY = os.getenv("VIRUS_TOTAL_API_KEY")
 
 # Safe file extensions
 SAFE_EXTENSIONS = {'log', 'txt', 'bmp', 'gif', 'png', 'jpeg', 'jpg', 'wma', 'avi',
-                   'wav', 'mp4', 'mp3', 'webp', 'txt'}
+                   'wav', 'mp4', 'mp3', 'webp'}
 
 # Sender email domains
 FREE_EMAIL_DOMAINS = {"gmail.com", "outlook.com", "hotmail.com", "yahoo.com", 
