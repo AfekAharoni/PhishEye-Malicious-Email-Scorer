@@ -97,5 +97,15 @@ KNOWN_BRANDS = {
     "leumi": ["leumi.co.il"],
     "discount": ["discountbank.co.il"],
     "bit": ["bitpay.co.il"],
-    "phishbank": ["phishbank.com"] # just to test
+    # for tests usage:
+    "phishbank": ["phishbank.com"], 
+    "notphishybank": ["notphishybank.com"] 
 }
+
+# Email content
+PHISHING_KEYWORDS = ["urgent", "verify your account", "account suspended",
+                     "password", "login", "payment failed", "security alert",
+                     "unusual activity", "click here", "final warning",
+                     "confirm your identity"]
+SENSITIVE_REQUESTS = ["password", "credit card", "otp", "one time password",
+                      "verification code", "bank account", "id number"]
