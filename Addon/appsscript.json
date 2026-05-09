@@ -1,0 +1,29 @@
+{
+  "timeZone": "Asia/Jerusalem",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "addOns": {
+      "common": {
+          "name": "PhishEye",
+          "logoUrl": "https://i.ibb.co/spvJDzM6/circled-logo.png"
+      },
+      "gmail": {
+          "contextualTriggers": [
+            {
+                "unconditional": {}, 
+                "onTriggerFunction": "buildAddOn"
+            }
+          ], 
+          "homepageTrigger": {
+            "runFunction": "buildHomePage",
+            "enabled": true
+          }
+      }
+  },
+  "oauthScopes": [
+      "https://www.googleapis.com/auth/gmail.addons.execute",
+      "https://www.googleapis.com/auth/gmail.readonly",
+      "https://www.googleapis.com/auth/script.external_request"
+  ]
+}
