@@ -1,0 +1,7 @@
+beautifulsoup4==4.9.3
+fastapi==0.136.1
+httpx==0.28.1
+pydantic==2.13.4
+python-dotenv==1.2.2
+uvicorn==0.13.4
+vt_py==0.22.0
