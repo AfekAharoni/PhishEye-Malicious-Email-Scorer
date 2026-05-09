@@ -1,8 +1,9 @@
+import base64
 import vt
 import hashlib
-from typing import Dict, Any
-from constants import SUSPICIOUS_STATUS, MALICIOUS_STATUS
-
+from typing import Dict, Any, Tuple
+from constants import SAFE_EXTENSIONS, SUSPICIOUS_STATUS, MALICIOUS_STATUS
+from schemas import Attachment
 
 class FileAnalyzer:
     def __init__(self, api_key: str):
@@ -49,6 +50,46 @@ class FileAnalyzer:
                 }
             raise e
     
+    async def analyze_files(self, attachments: list[Attachment]) -> Tuple[list[str], int, bool]:
+        """
+        Scans email attachments using VirusTotal by checking their file hashes
+        Args:
+            attachments: List of attachment objects
+        Returns:
+            A tuple of (reasons list, accumlated score, malicious flag)
+        """
+        reasons = []
+        score = 0
+        has_malicious = False
+        for att in attachments:
+                print(f"[FILE CHECK]:   Now checking file {att.filename}")
+                extension = att.filename.rsplit(".", 1)[-1].lower()
+                if extension in SAFE_EXTENSIONS:
+                    continue
+                try:
+                    file_bytes = base64.b64decode(att.content)
+                    report = await self.get_file_report_by_hash(file_bytes)
+                    if report.get("status") == "found":
+                        if report.get(MALICIOUS_STATUS, 0) > 0:
+                            has_malicious = True
+                            score += 100
+                            reasons.append(f"Malicious file detected: {att.filename}")
+                        elif report.get(SUSPICIOUS_STATUS, 0) > 0:
+                            score += 60
+                            reasons.append(f"Suspicious file detected: {att.filename}")
+                        else:
+                            reasons.append(f'File "{att.filename}" was checked and is clean')
+                    elif report.get("status") == "not_found":
+                        score += 20
+                        reasons.append(f"File {att.filename} is unknown to VirusTotal")
+                    elif report.get("status") == "error":
+                        score += 20
+                        reasons.append(f"System error: {report.get('message')}")
+                except Exception as e:
+                    score += 20
+                    reasons.append(f"Error analyzing file {att.filename}")
+        return reasons, score, has_malicious
+
     async def close(self) -> None:
         """
         Closes the VirusTotal client sessions gracefully

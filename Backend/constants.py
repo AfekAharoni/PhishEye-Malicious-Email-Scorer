@@ -7,11 +7,17 @@ load_dotenv()
 
 URL_PATTERN = r'https?://[^\s<>"]+|www\.[^\s<>"]+'
 """
-Find for http, s is optional, then ://, then continues to read chars except (one or more)
+Looks for http, s is optional, then ://, then continues to read chars except (one or more)
 from spaces/tabs (\s) and '<', '>' from HTML code
 Another option is 'www.' as prefix
 """
-
+SENDER_DOMAIN_PATTERN = r'[\w\.-]+@([\w\.-]+)'
+"""
+Looks for one or more valid email name characthers before the '@' sign, then '@' sign, then 
+(one or more) domain characthers after the '@' sign
+Group 0: all text
+Group 1: domain only
+"""
 # HTML parsing
 HTML_PARSER = "html.parser"
 A_TAG = 'a'
@@ -74,3 +80,22 @@ VIRUS_TOTAL_API_KEY = os.getenv("VIRUS_TOTAL_API_KEY")
 # Safe file extensions
 SAFE_EXTENSIONS = {'log', 'txt', 'bmp', 'gif', 'png', 'jpeg', 'jpg', 'wma', 'avi',
                    'wav', 'mp4', 'mp3', 'webp', 'txt'}
+
+# Sender email domains
+FREE_EMAIL_DOMAINS = {"gmail.com", "outlook.com", "hotmail.com", "yahoo.com", 
+                      "icloud.com", "proton.me", "protonmail.com", "tuta.com",
+                      "zoho.com", "aol.com", "gmx.com", "mail.com",
+                      "walla.co.il", "yandex.com", "mailfence.com"}
+KNOWN_BRANDS = {
+    "paypal": ["paypal.com"],
+    "google": ["google.com"],
+    "microsoft": ["microsoft.com", "office.com"],
+    "apple": ["apple.com"],
+    "amazon": ["amazon.com"],
+    "facebook": ["facebook.com", "meta.com"],
+    "instagram": ["instagram.com"],
+    "leumi": ["leumi.co.il"],
+    "discount": ["discountbank.co.il"],
+    "bit": ["bitpay.co.il"],
+    "phishbank": ["phishbank.com"] # just to test
+}
