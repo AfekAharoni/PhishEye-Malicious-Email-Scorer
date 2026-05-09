@@ -1,5 +1,7 @@
-# PhishEye: Malicious Email Scorer
+<div align="center">
 
+# PhishEye: Malicious Email Scorer
+</div>
 <div align="center">
 
 ![PhishEye Logo](assets/New/circled-logo.png)
