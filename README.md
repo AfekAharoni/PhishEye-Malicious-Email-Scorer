@@ -1,3 +1,4 @@
+<div align="center">
 # PhishEye: Malicious Email Scorer
 
 ![PhishEye Logo](assets/New/circled-logo.png)
@@ -77,6 +78,8 @@ PhishEye evaluates email integrity through several key vectors:
      ngrok http 8000
      ```
    * Copy the `https` forwarding URL provided by ngrok.
+  
+</div>
 
 4. **Deploy the Add-on:**
    * Push the frontend code to Google Apps Script using the web editor.
