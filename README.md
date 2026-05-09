@@ -1,10 +1,9 @@
 <div align="center">
 
 # PhishEye: Malicious Email Scorer
-</div>
-<div align="center">
 
 ![PhishEye Logo](assets/New/circled-logo.png)
+</div>
 
 ## Overview
 **PhishEye** is a Gmail Add-on designed to enhance user security by analyzing incoming emails for potential threats. Developed as a home assignment for the **Upwind Security Bootcamp**, PhishEye provides a maliciousness score, a clear verdict (Safe, Suspicious, or Malicious), and detailed reasoning to help users make informed decisions about their inbox.
