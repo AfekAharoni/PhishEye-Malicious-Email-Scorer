@@ -74,7 +74,7 @@ PhishEye evaluates email integrity through several key vectors:
 
 ---
 
-## Future Work & Limitations
+## Limitations
 * **Language Support:** Currently, PhishEye is optimized for **English** content only. 
 * **VirusTotal API limit:** 500 files/day
 * **VirusTotal API limit:** 10,000 URLs/day
