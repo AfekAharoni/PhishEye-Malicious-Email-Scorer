@@ -87,3 +87,11 @@ PhishEye evaluates email integrity through several key vectors:
    * Push the frontend code to Google Apps Script using the web editor.
    * Update the script properties with your ngrok URL so the Add-on can communicate with your local backend service.
    * Ensure you are logged into the same Gmail account intended for the live demonstration.
+  
+   
+<div align="center">
+
+© 2026 Afek Aharoni | [GitHub Profile](https://github.com/AfekAharoni)
+
+</div>
+
