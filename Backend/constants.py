@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Print logs iff debug if True
+DEBUG = False
+
 # Regex patterns
 
 URL_PATTERN = r'https?://[^\s<>"]+|www\.[^\s<>"]+'
@@ -45,7 +48,7 @@ UNWANTED_SOFTWARE - Flags sites that promote or distribute software that
     may be deceptive, difficult to uninstall or perform unexpected actions
     on a user's device
 """
-PLATFORM_TYPES = ["ANY_PLATFORM"], # works for every platform, i.e Windows/Mac/Andriod etc
+PLATFORM_TYPES = ["ANY_PLATFORM"] # works for every platform, i.e Windows/Mac/Andriod etc
 THREAT_ENTRY_TYPES = ["URL"]
 URL_PLACEHOLDER = "{URL_HERE}"
 REQUEST_TO_GOOGLE_API = {
@@ -88,7 +91,7 @@ FREE_EMAIL_DOMAINS = {"gmail.com", "outlook.com", "hotmail.com", "yahoo.com",
                       "walla.co.il", "yandex.com", "mailfence.com"}
 KNOWN_BRANDS = {
     "paypal": ["paypal.com"],
-    "google": ["google.com"],
+    "google": ["google.com", "googlemail.com"],
     "microsoft": ["microsoft.com", "office.com"],
     "apple": ["apple.com"],
     "amazon": ["amazon.com"],
@@ -109,3 +112,9 @@ PHISHING_KEYWORDS = ["urgent", "verify your account", "account suspended",
                      "confirm your identity"]
 SENSITIVE_REQUESTS = ["password", "credit card", "otp", "one time password",
                       "verification code", "bank account", "id number"]
+
+# URL Shorteners
+SHORTENER_DOMAINS = {"bit.ly", "tinyurl.com", "t.co", "goo.gl", 
+                     "ow.ly", "is.gd", "buff.ly", "cutt.ly",
+                     "rebrand.ly", "rb.gy", "shorturl.at", "urli.info"}
+

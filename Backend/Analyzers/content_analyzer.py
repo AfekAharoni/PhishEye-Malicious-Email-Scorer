@@ -1,6 +1,6 @@
 from typing import Tuple
 from bs4 import BeautifulSoup
-from constants import PHISHING_KEYWORDS, SENSITIVE_REQUESTS, HTML_PARSER
+from constants import PHISHING_KEYWORDS, SENSITIVE_REQUESTS, HTML_PARSER, DEBUG
 
 class ContentAnalyzer:
     @staticmethod
@@ -27,7 +27,8 @@ class ContentAnalyzer:
         reasons = []
         score = 0
         has_malicious = False
-        print(f"[CONTENT CHECK]:   Now checking content")
+        if DEBUG:
+            print(f"[CONTENT CHECK]:   Now checking content")
         text = f"{subject} {ContentAnalyzer.html_to_text(body)}".lower()
         found_keywords = [keyword for keyword in PHISHING_KEYWORDS if keyword in text]
         if found_keywords:

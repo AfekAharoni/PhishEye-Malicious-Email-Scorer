@@ -2,7 +2,7 @@ import base64
 import vt
 import hashlib
 from typing import Dict, Any, Tuple
-from constants import SAFE_EXTENSIONS, SUSPICIOUS_STATUS, MALICIOUS_STATUS
+from constants import SAFE_EXTENSIONS, SUSPICIOUS_STATUS, MALICIOUS_STATUS, DEBUG
 from schemas import Attachment
 
 class FileAnalyzer:
@@ -62,7 +62,8 @@ class FileAnalyzer:
         score = 0
         has_malicious = False
         for att in attachments:
-                print(f"[FILE CHECK]:   Now checking file {att.filename}")
+                if DEBUG:
+                    print(f"[FILE CHECK]:   Now checking file {att.filename}")
                 extension = att.filename.rsplit(".", 1)[-1].lower()
                 if extension in SAFE_EXTENSIONS:
                     continue

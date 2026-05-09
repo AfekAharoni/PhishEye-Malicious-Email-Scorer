@@ -1,6 +1,6 @@
 import re
 from typing import Tuple
-from constants import KNOWN_BRANDS, FREE_EMAIL_DOMAINS, SENDER_DOMAIN_PATTERN
+from constants import KNOWN_BRANDS, FREE_EMAIL_DOMAINS, SENDER_DOMAIN_PATTERN, DEBUG
 
 class SenderAnalyzer:
     @staticmethod
@@ -29,7 +29,8 @@ class SenderAnalyzer:
         has_malicious = False
         sender_lower = sender.lower()
         domain = SenderAnalyzer.extract_email_domain(sender)
-        print(f"[SENDER CHECK]:   Now checking sender")
+        if DEBUG:
+            print(f"[SENDER CHECK]:   Now checking sender")
         if not domain:
             return ["Could not parse sender email address"], 10, False
         for brand, allowed_domains in KNOWN_BRANDS.items():

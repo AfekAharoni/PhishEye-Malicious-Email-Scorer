@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Optional, Set, Tuple
 import httpx
 from constants import (
-    SAFE_BROWSING_API_KEY, SAFE_BROWSING_URL,
-    REQUEST_TO_GOOGLE_API, SUCCESS_STATUS_CODE, TIMEOUT)
+    SAFE_BROWSING_API_KEY, SAFE_BROWSING_URL, DEBUG,
+    REQUEST_TO_GOOGLE_API, SUCCESS_STATUS_CODE, TIMEOUT, SHORTENER_DOMAINS)
 import copy
-from typing import Set, Tuple
+from urllib.parse import urlparse
 
 class URLAnalyzer:
     @staticmethod
@@ -32,6 +32,36 @@ class URLAnalyzer:
             return None 
     
     @staticmethod
+    def normalize_url(url: str) -> str:
+        """
+        Ensures that a URL has an http/https scehema
+        Args:
+            url (str): The URL extracted from the email
+        Returns:
+            str: The url with a schema
+        """
+        if url.startswith("https://") or url.startswith("http://"):
+            return url
+        return "https://" + url
+    
+    @staticmethod
+    async def get_final_url(url: str) -> str:
+        """
+        Resolves the final destination of a URL by following HTTP redirects
+        Args:
+            url (str): The original URL extracted from the email
+        Returns:
+            str: The final URL after following redirects.
+        """
+        normalized_url = URLAnalyzer.normalize_url(url)
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(normalized_url, follow_redirects=True, timeout=TIMEOUT)
+                return str(response.url)
+        except Exception:
+            return url
+    
+    @staticmethod
     async def analyze_urls(all_urls_to_check: Set[str], mismatched_urls: Set[str]) -> Tuple[list[str], int, bool]:
         """
         Scans a set of URLs against Google Safe Browsing and checks for deceptive links
@@ -45,23 +75,34 @@ class URLAnalyzer:
         score = 0
         has_malicious = False
         for url in all_urls_to_check:
-            print(f"[LINK CHECK]:   Now checking link {url}")
-            result = await URLAnalyzer.is_malicious_url_by_google(url)
+            if DEBUG:
+                print(f"[LINK CHECK]:   Now checking link {url}")
+            final_url = await URLAnalyzer.get_final_url(url)
+            redirected = final_url != url
+            if redirected:
+                if DEBUG:
+                    print(f"[LINK CHECK]: Redirects to {final_url}")
+            result = await URLAnalyzer.is_malicious_url_by_google(final_url)
             if result is True:
                 has_malicious = True
                 score += 100
                 if url in mismatched_urls:
-                    reasons.append(f"Deceptive link detected, and the actual URL is dangerous: {url}")
+                    reasons.append(f"Deceptive link detected, and the actual URL is dangerous: {final_url}")
                 else:
-                    reasons.append(f"Dangerous link detected: {url}")
+                    label = f"(redirected from {url})" if redirected else ""
+                    reasons.append(f"Dangerous link detected: {final_url} {label}".strip())
             elif url in mismatched_urls:
-                score += 15
                 if result is False:
-                    reasons.append(f"Deceptive link detected, but the actual URL appears safe: {url}")
+                    reasons.append(f"Deceptive link detected, but the actual URL appears safe: {final_url}")
                 else:
-                    reasons.append(f"Deceptive link detected, but the actual URL could not be fully verified: {url}")
+                    score += 15
+                    reasons.append(f"Deceptive link detected, but the actual URL could not be fully verified: {final_url}")
             elif result is None:
                 score += 15
-                reasons.append(f"Could not verify the safety of: {url}")
+                reasons.append(f"Could not verify the safety of: {final_url}")
+            domain = urlparse(url).netloc.lower().removeprefix("www.")
+            if domain in SHORTENER_DOMAINS and result is not True:
+                score += 10
+                reasons.append(f"URL shortener detected (resolved to: {final_url}): {url}")
         return reasons, score, has_malicious
 
