@@ -20,7 +20,13 @@ When the add-on is initialized and ready to scan:
   <img src="Examples/addon-ready.png" width="350" alt="Add-on Ready">
 </p>
 
-### 2. Analysis Scenarios
+### 2. Server is Down
+<p align="center">
+  <img src="Examples/server-is-down.png" width="350" alt="Server-is-Down">
+</p>
+
+
+### 3. Analysis Scenarios
 | Scenario | Email Input | PhishEye Verdict |
 | :--- | :--- | :--- |
 | **Safe Email** | ![Safe Email](Examples/safe-email.png) | ![Safe Recognition](Examples/safe-recognition.png) |
