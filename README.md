@@ -10,8 +10,22 @@
 
 ---
 
-## The Assignment
-This project was developed in response to the Upwind Bootcamp Home Assignment.
+## Examples & Screenshots
+
+Below are examples of PhishEye in action, demonstrating how it analyzes different email types and provides clear verdicts.
+
+### 1. System Ready
+When the add-on is initialized and ready to scan:
+<p align="center">
+  <img src="Examples/addon-ready.png" width="350" alt="Add-on Ready">
+</p>
+
+### 2. Analysis Scenarios
+| Scenario | Email Input | PhishEye Verdict |
+| :--- | :--- | :--- |
+| **Safe Email** | ![Safe Email](Examples/safe-email.png) | ![Safe Recognition](Examples/safe-recognition.png) |
+| **Suspicious Email** | ![Suspicious Email](Examples/suspicious-email.png) | ![Suspicious Recognition](Examples/suspicious-recognition.png) |
+| **Malicious Email** | ![Malicious Email](Examples/malicious-email.png) | ![Malicious Recognition](Examples/malicious-recognition.png) |
 
 ---
 
