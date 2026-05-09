@@ -118,3 +118,8 @@ SHORTENER_DOMAINS = {"bit.ly", "tinyurl.com", "t.co", "goo.gl",
                      "ow.ly", "is.gd", "buff.ly", "cutt.ly",
                      "rebrand.ly", "rb.gy", "shorturl.at", "urli.info"}
 
+# Authentication protocols
+DKIM_TAG = "dkim"
+SPF_TAG = "spf"
+DMARC_TAG = "dmarc"
+PASS_RESULT = "pass"

@@ -6,6 +6,7 @@ from Analyzers.url_analyzer import URLAnalyzer
 from Analyzers.file_analyzer import FileAnalyzer
 from Analyzers.sender_analyzer import SenderAnalyzer
 from Analyzers.content_analyzer import ContentAnalyzer
+from Analyzers.authentication_analyzer import AuthenticationAnalyzer
 from constants import (KEY_ACTUAL_URL, SAFE_STATUS,
                         MALICIOUS_STATUS, SUSPICIOUS_STATUS,
                         VIRUS_TOTAL_API_KEY, KEY_DISPLAY_TEXT)
@@ -39,9 +40,10 @@ async def analyze_email(data: EmailData, request: Request) -> dict[str, Any]:
     # Preprocess hyperlinks for mismatches
     hyperlinks = EmailPreprocessor.extract_hyperlinks(data.body)
     for link in hyperlinks:
-        display_text = link.get(KEY_DISPLAY_TEXT, "")
         actual_url = link[KEY_ACTUAL_URL]
-        all_urls_to_check.add(actual_url)
+        normalized_url = URLAnalyzer.normalize_url(actual_url)
+        all_urls_to_check.add(normalized_url)
+        display_text = link.get(KEY_DISPLAY_TEXT, "")
         # Check for deceptive/mismtached link 
         if display_text and (display_text.startswith("http") or display_text.startswith("www")):
             if not actual_url.startswith(display_text) and not display_text.startswith(actual_url):
@@ -49,7 +51,7 @@ async def analyze_email(data: EmailData, request: Request) -> dict[str, Any]:
     # Add raw URLs from content
     raw_urls = EmailPreprocessor.extract_urls(data.body)
     for url in raw_urls:
-        all_urls_to_check.add(url)
+        all_urls_to_check.add(URLAnalyzer.normalize_url(url))
     url_task = URLAnalyzer.analyze_urls(all_urls_to_check, mismatched_urls)
     if data.attachments:
         file_task = request.app.state.file_analyzer.analyze_files(data.attachments)
@@ -59,16 +61,18 @@ async def analyze_email(data: EmailData, request: Request) -> dict[str, Any]:
         file_task = get_empty_result()
     sender_task = SenderAnalyzer.analyze_sender(data.sender)
     content_task = ContentAnalyzer.analyze_content(data.subject, data.body)
-    url_results, file_results, sender_results, content_results = await asyncio.gather(
-        url_task, file_task, sender_task, content_task)
+    auth_task = AuthenticationAnalyzer.analyze_authentication(data.authResults)
+    url_results, file_results, sender_results, content_results, auth_results = await asyncio.gather(
+        url_task, file_task, sender_task, content_task, auth_task)
     # Summary of reasons, malicious status and score
     url_reasons, url_score, url_malicious = url_results
     file_reasons, file_score, file_malicious = file_results
     sender_reasons, sender_score, sender_malicious = sender_results
     content_reasons, content_score, content_malicious = content_results
-    total_reasons = url_reasons + file_reasons + sender_reasons + content_reasons
-    has_malicious = url_malicious or file_malicious or sender_malicious or content_malicious
-    final_score = min(url_score + file_score + sender_score + content_score, 100)
+    auth_reasons, auth_score, auth_malicious = auth_results
+    total_reasons = url_reasons + file_reasons + sender_reasons + content_reasons + auth_reasons
+    has_malicious = url_malicious or file_malicious or sender_malicious or content_malicious or auth_malicious
+    final_score = min(url_score + file_score + sender_score + content_score + auth_score, 100)
     if has_malicious:
         final_status = MALICIOUS_STATUS
         display_message = "Warning: this email contains malicious content."

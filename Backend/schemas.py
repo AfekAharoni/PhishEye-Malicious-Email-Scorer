@@ -15,5 +15,6 @@ class EmailData(BaseModel):
     """
     subject: str 
     body: str
-    sender: str 
+    sender: str
+    authResults: Optional[str] = ""
     attachments: Optional[list[Attachment]] = []
