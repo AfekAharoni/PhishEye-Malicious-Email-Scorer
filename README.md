@@ -67,7 +67,7 @@ PhishEye evaluates email integrity through several key vectors:
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/AfekAharoni/PhishEye-Malicious-Email-Scorer](https://github.com/AfekAharoni/PhishEye-Malicious-Email-Scorer)
+   git clone https://github.com/AfekAharoni/PhishEye-Malicious-Email-Scorer
 2. **Backend Setup:**
    * Open the backend project in VS Code.
    * Install the necessary dependencies.
