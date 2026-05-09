@@ -62,8 +62,8 @@ async def analyze_email(data: EmailData, request: Request) -> dict[str, Any]:
     sender_task = SenderAnalyzer.analyze_sender(data.sender)
     content_task = ContentAnalyzer.analyze_content(data.subject, data.body)
     auth_task = AuthenticationAnalyzer.analyze_authentication(data.authResults)
-    url_results, file_results, sender_results, content_results, auth_results = await asyncio.gather(
-        url_task, file_task, sender_task, content_task, auth_task)
+    url_results, file_results, sender_results, content_results, auth_results = await asyncio.wait_for(
+        asyncio.gather(url_task, file_task, sender_task, content_task, auth_task), timeout=30)
     # Summary of reasons, malicious status and score
     url_reasons, url_score, url_malicious = url_results
     file_reasons, file_score, file_malicious = file_results
